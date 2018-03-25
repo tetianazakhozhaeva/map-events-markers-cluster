@@ -1,0 +1,44 @@
+.halt-marker{
+  border: solid 3px #0000ff;
+  width: 26px;
+  height: 26px;
+  position: absolute;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  top: -13px;
+  left: -13px;
+  background-color: #0000ff;
+}
+
+.halt-marker-desktop{
+  border: solid 3px #0000ff;
+  position: absolute;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0000ff;
+
+  width: 22px;
+  height: 22px;
+}
+
+.halt-marker__rectangle{
+  background-color: #f90700;
+  width: 10px;
+  height: 10px;
+}
+
+.halt-marker__rectangle-desktop{
+  background-color: #f90700;
+  width: 8px;
+  height: 8px;
+}
+
+.halt-marker__p{
+  color: #ffffff;
+  font-weight: 900;
+  font-size: 13px;
+}

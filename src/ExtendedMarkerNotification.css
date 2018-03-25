@@ -1,0 +1,37 @@
+.notification-marker{
+  border: solid 3px #0000ff;
+  width: 26px;
+  height: 26px;
+  position: absolute;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+}
+
+.notification-marker-desktop{
+  border: solid 3px #0000ff;
+  position: absolute;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #ffffff;
+  width: 22px;
+  height: 22px;
+}
+
+.notification-marker__circle{
+  background-color: #f90700;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.notification-marker__circle-desktop{
+  background-color: #f90700;
+  border-radius: 50%;
+  width: 8px;
+  height: 8px;
+}
