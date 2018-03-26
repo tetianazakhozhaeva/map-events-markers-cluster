@@ -1,18 +1,17 @@
-import React, { Component } from 'react';
-import { bool, object, func } from 'prop-types';
-import { bindActionCreators } from 'redux';
-import { Map, TileLayer, Marker } from 'react-leaflet';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {bool, object, func} from 'prop-types';
+import {bindActionCreators} from 'redux';
+import {Map, TileLayer, Marker} from 'react-leaflet';
+import {connect} from 'react-redux';
 import './App.css';
 import './ExtendedMarkerHalt.css';
 import './ExtendedMarkerNotification.css';
-import HaltMarker from './components/map-components/HaltMarker'
-import NotificationMarker from './components/map-components/NotificationMarker'
-import MarkerCluster from "./components/marker-cluster/marker-cluster";
+import './cluster-icon.css'
 import MarkerClusterGroup from "./components/react-leaflet-marker-cluster/react-leaflet-marker-cluster";
-// import NotificationCircle from "./components/simple-notification-circle/notification-circle";
 import NotificationCircle from './components/events-markers/notification-circle'
 import HaltCircle from "./components/events-markers/halt-circle";
+import VehicleCircle from "./components/vehicle-marker/vehicle-circle";
+import {getDivIcon} from "./components/events-markers/icon-util";
 
 class App extends Component {
     static propTypes = {
@@ -26,6 +25,11 @@ class App extends Component {
         zoom: 13,
 
         isNotifications: false,
+
+        markerCoordinate: {
+            latitude: 50.01,
+            longitude: 36.031
+        },
 
         halts: [
             {
@@ -68,7 +72,7 @@ class App extends Component {
         ]
     };
 
-    emptyFunc1 = (clusterLayer) =>{
+    emptyFunc1 = (clusterLayer) => {
 //todo ???
 
         console.log(clusterLayer.getAllChildMarkers().length)
@@ -79,7 +83,8 @@ class App extends Component {
 
     };
 
-    emptyFunc = () => {}
+    emptyFunc = () => {
+    }
 
     clickHandler = () => {
         this.setState({
@@ -93,16 +98,6 @@ class App extends Component {
         const position = [this.state.lat, this.state.lng];
 
         const haltCircles = this.state.halts.map((item, index) => {
-            // return (
-            //     <HaltMarker
-            //         key={'halts' + index}
-            //         index={index}
-            //         halt={item}
-            //         clickHandler={this.emptyFunc}
-            //         hidePopupInfo={this.emptyFunc}
-            //         showPopup={this.emptyFunc}
-            //     />)
-
             return (<HaltCircle
                 key={'halts' + index}
                 index={index}
@@ -117,22 +112,21 @@ class App extends Component {
 
             let index = 0;
 
-            // return <NotificationMarker
-            //     key={'notification' + key}
-            //     index={index}
-            //     notification={item}
-            //     trackerState={item}
-            //     clickHandler={this.emptyFunc}
-            //     hidePopupInfo={this.emptyFunc}
-            //     showPopup={this.emptyFunc}
-            // />
-
             return <NotificationCircle
                 key={'notification' + key}
-                    index={index}
-                    notification={item}
+                index={index}
+                notification={item}
             />
         });
+
+
+        // todo marker icon
+        const innerContent = `<div class="simple-marker"></div>`;
+        const innerIcon = getDivIcon(innerContent, 30);
+
+        // todo cluster icon
+        const innerClusterContent = `<div class="events-cluster-icon">i</div>`;
+        const innerClusterIcon = getDivIcon(innerClusterContent, 22);
 
         return <div className="App">
             <div className="container">
@@ -147,21 +141,35 @@ class App extends Component {
                     {haltCircles}
                     <MarkerClusterGroup
                         onClusterClick={this.emptyFunc1}
-                    // options={}
+                        options={
+                            {
+                                spiderfyOnMaxZoom: true,
+                                showCoverageOnHover: false,
+                                zoomToBoundsOnClick: false,
+                                iconCreateFunction: function (cluster) {
+                                    return innerClusterIcon;
+                                }
+                            }
+                        }
                     >
-                    {notifications}
+                        {notifications}
                     </MarkerClusterGroup>
                     <MarkerClusterGroup>
-                        <Marker position={[49.8397, 24.0297]} />
-                        <Marker position={[50.4501, 30.5234]} />
-                        <Marker position={[52.2297, 21.0122]} />
-                        <Marker position={[50.0647, 19.9450]} />
-                        <Marker position={[48.9226, 24.7111]} />
-                        <Marker position={[48.7164, 21.2611]} />
-                        <Marker position={[51.5, -0.09]} />
-                        <Marker position={[51.5, -0.09]} />
-                        <Marker position={[51.5, -0.09]} />
+                        <Marker position={[49.8397, 24.0297]}/>
+                        <Marker position={[50.4501, 30.5234]}/>
+                        <Marker position={[52.2297, 21.0122]}/>
+                        <Marker position={[50.0647, 19.9450]}/>
+                        <Marker position={[48.9226, 24.7111]}/>
+                        <Marker position={[48.7164, 21.2611]}/>
+                        <Marker position={[51.5, -0.09]}/>
+                        <Marker position={[51.5, -0.09]}/>
+                        <Marker position={[51.5, -0.09]}/>
                     </MarkerClusterGroup>
+
+                    <VehicleCircle
+                        coordinate={this.state.markerCoordinate}
+                        icon={innerIcon}
+                    />
                 </Map>
                 <button className="button" onClick={this.clickHandler}><span>Hover </span></button>
             </div>
@@ -170,17 +178,3 @@ class App extends Component {
 }
 
 export default App;
-
-// const mapStateToProps = state => ({
-//     isEditing: state.reducer.isEditing,
-//     notice: state.reducer.buffer.notice,
-// });
-//
-// const mapDispatchToProps = dispatch =>
-//     bindActionCreators(Object.assign({
-//         setCreateMode,
-//         setEditingMode,
-//         setCoordinates,
-//     }), dispatch);
-//
-// export default connect(mapStateToProps, mapDispatchToProps)(App);

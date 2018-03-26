@@ -1,0 +1,14 @@
+.events-cluster-icon{
+    border: solid 3px #0000ff;
+    position: absolute;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0000ff;
+    width: 22px;
+    height: 22px;
+    color: #ffffff;
+    font-weight: 900;
+    font-size: 13px;
+}
