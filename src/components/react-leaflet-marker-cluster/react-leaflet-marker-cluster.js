@@ -144,6 +144,7 @@ export default class MarkerClusterGroup extends LayerGroup {
     getChildContext() {
         return {
             layerContainer: this.leafletElement,
+            popupContainer: this.leafletElement,
         };
     }
 
@@ -174,4 +175,9 @@ MarkerClusterGroup.propTypes = {
 
 MarkerClusterGroup.defaultProps = {
     markers: [],
+};
+
+MarkerClusterGroup.childContextTypes ={
+    layerContainer: PropTypes.object,
+    popupContainer: PropTypes.object,
 };
