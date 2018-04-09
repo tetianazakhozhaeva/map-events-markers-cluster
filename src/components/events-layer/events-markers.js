@@ -5,6 +5,9 @@ import MarkerCluster from "../marker-cluster/marker-cluster";
 import { getDivIcon } from "../events-markers/icon-util";
 import { LayerGroup } from "react-leaflet";
 import MarkerClusterGroup from "../react-leaflet-marker-cluster/react-leaflet-marker-cluster";
+import { getDeviceType, DESKTOP } from "../../helpers/detect-device";
+
+const DEVICE_TYPE = getDeviceType();
 
 export default class EventsMarkers extends LayerGroup {
   constructor() {
@@ -100,6 +103,10 @@ export default class EventsMarkers extends LayerGroup {
     // todo !!!! cluster.propagatedFrom.getAllChildMarkers()[0]._latlng
   }
 
+  clusterMouseOutHandler = () => {
+    console.log("mouse out");
+  };
+
   render() {
     const haltCircles = this.state.halts.map((item, index) => {
       return (
@@ -132,7 +139,11 @@ export default class EventsMarkers extends LayerGroup {
 
     return (
       <MarkerClusterGroup
-        onClusterClick={this.emptyFunc1}
+        onClusterClick={DEVICE_TYPE !== DESKTOP ? this.emptyFunc1 : null}
+        onClusterOver={DEVICE_TYPE === DESKTOP ? this.emptyFunc1 : null}
+        onClusterOut={
+          DEVICE_TYPE === DESKTOP ? this.clusterMouseOutHandler : null
+        }
         options={{
           spiderfyOnMaxZoom: false,
           showCoverageOnHover: false,

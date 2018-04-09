@@ -138,6 +138,18 @@ export default class MarkerClusterGroup extends LayerGroup {
       });
     }
 
+    if (this.props.onClusterOver) {
+      markerClusterGroup.on("clustermouseover", cluster => {
+        this.props.onClusterOver(cluster.layer);
+      });
+    }
+
+    if (this.props.onClusterOut) {
+      markerClusterGroup.on("clustermouseout", cluster => {
+        this.props.onClusterOut(cluster.layer);
+      });
+    }
+
     if (this.props.onPopupClose) {
       markerClusterGroup.on("popupclose", map => {
         this.props.onPopupClose(map.popup);
