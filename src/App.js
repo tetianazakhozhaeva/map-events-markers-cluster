@@ -8,11 +8,11 @@ import "./ExtendedMarkerHalt.css";
 import "./ExtendedMarkerNotification.css";
 import "./cluster-icon.css";
 import MarkerClusterGroup from "./components/react-leaflet-marker-cluster/react-leaflet-marker-cluster";
-import NotificationCircle from "./components/events-markers/notification-circle";
-import HaltCircle from "./components/events-markers/halt-circle";
 import VehicleCircle from "./components/vehicle-marker/vehicle-circle";
 import { getDivIcon } from "./components/events-markers/icon-util";
 import PlainPopup from "./components/popups/plain-popup";
+import EventsMarkers from "./components/events-layer/events-markers";
+import MiddleLayer from "./components/events-layer/middle-layer";
 
 class App extends Component {
   static propTypes = {
@@ -32,46 +32,7 @@ class App extends Component {
     markerCoordinate: {
       latitude: 50.01,
       longitude: 36.031
-    },
-
-    halts: [
-      {
-        ignitionOffDuration: 0,
-        ignitionOnDuration: 0,
-        latitude: 50,
-        longitude: 36,
-        startHalt: 10,
-        endHalt: 0
-      },
-      {
-        ignitionOffDuration: 0,
-        ignitionOnDuration: 0,
-        latitude: 50,
-        longitude: 36.02,
-        startHalt: 10,
-        endHalt: 0
-      }
-    ],
-    notifications: [
-      {
-        latitude: 50.01,
-        longitude: 36.03,
-        trackerId: 1,
-        type: "fuelDrain"
-      },
-      {
-        latitude: 50.01,
-        longitude: 36.0301,
-        trackerId: 1,
-        type: "fueling"
-      },
-      {
-        latitude: 50.04,
-        longitude: 36.04,
-        trackerId: 1,
-        type: "fuelDrain"
-      }
-    ]
+    }
   };
 
   emptyFunc1 = clusterLayer => {
@@ -79,11 +40,11 @@ class App extends Component {
 
     console.log(clusterLayer.getAllChildMarkers().length);
 
+    clusterLayer.getAllChildMarkers();
+
     this.setState({
       isPopupVisible: !this.state.isPopupVisible
     });
-
-    // 1 todo !!!! cluster.layer.getBounds()
 
     // todo !!!! cluster.propagatedFrom.getAllChildMarkers()[0]._latlng
   };
@@ -101,68 +62,46 @@ class App extends Component {
   render() {
     const position = [this.state.lat, this.state.lng];
 
-    const haltCircles = this.state.halts.map((item, index) => {
-      return (
-        <HaltCircle
-          key={"halts" + index}
-          index={index}
-          halt={item}
-          clickHandler={this.emptyFunc}
-          hidePopupInfo={this.emptyFunc}
-          showPopup={this.emptyFunc}
-        />
-      );
-    });
-
-    const notifications = this.state.notifications.map((item, key) => {
-      let index = 0;
-
-      return (
-        <NotificationCircle
-          key={"notification" + key}
-          index={index}
-          notification={item}
-        />
-      );
-    });
-
     // todo marker icon
     const innerContent = `<div class="simple-marker"></div>`;
     const innerIcon = getDivIcon(innerContent, 30);
 
     // todo cluster icon
-    const innerClusterContent = `<div class="events-cluster-icon">i</div>`;
-    const innerClusterIcon = getDivIcon(innerClusterContent, 22);
+    // const innerClusterContent = `<div class="events-cluster-icon">i</div>`;
+    // const innerClusterIcon = getDivIcon(innerClusterContent, 22);
 
     return (
       <div className="App">
         <div className="container">
-          <Map center={position} zoom={this.state.zoom}>
+          <Map center={position} zoom={this.state.zoom} maxZoom={18}>
             <TileLayer
               attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
               url="http://{s}.tile.osm.org/{z}/{x}/{y}.png"
             />
 
-            <MarkerClusterGroup
-              onClusterClick={this.emptyFunc1}
-              options={{
-                spiderfyOnMaxZoom: false,
-                showCoverageOnHover: false,
-                zoomToBoundsOnClick: false,
-                iconCreateFunction: function(cluster) {
-                  return innerClusterIcon;
-                }
-              }}
-            >
-              {notifications}
-              {haltCircles}
-              <PlainPopup
-                position={[50.01, 36.0301]}
-                isPopupVisible={this.state.isPopupVisible}
-              >
-                <span>content</span>
-              </PlainPopup>
-            </MarkerClusterGroup>
+            {/*<MarkerClusterGroup*/}
+            {/*onClusterClick={this.emptyFunc1}*/}
+            {/*options={{*/}
+            {/*spiderfyOnMaxZoom: false,*/}
+            {/*showCoverageOnHover: false,*/}
+            {/*zoomToBoundsOnClick: false,*/}
+            {/*iconCreateFunction: function(cluster) {*/}
+            {/*return innerClusterIcon;*/}
+            {/*}*/}
+            {/*}}*/}
+            {/*>*/}
+            {/*{notifications}*/}
+            {/*{haltCircles}*/}
+            {/*<PlainPopup*/}
+            {/*position={[50.01, 36.0301]}*/}
+            {/*isPopupVisible={this.state.isPopupVisible}*/}
+            {/*>*/}
+            {/*<span>content</span>*/}
+            {/*</PlainPopup>*/}
+            {/*</MarkerClusterGroup>*/}
+
+            {/*<EventsMarkers isNotifications={this.state.isNotifications} />*/}
+            <MiddleLayer isNotifications={this.state.isNotifications} />
             <MarkerClusterGroup>
               <Marker position={[49.8397, 24.0297]} />
               <Marker position={[50.4501, 30.5234]} />

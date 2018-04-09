@@ -1,38 +1,56 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from "react";
+import "leaflet.markercluster";
+import { object } from "prop-types";
+import L from "leaflet";
+import "./MarkerCluster.Default.css";
+import "./MarkerCluster.css";
 
-// import { LayerGroup } from 'react-leaflet';
-import L from 'leaflet';
-import 'leaflet.markercluster'
-import './MarkerCluster.Default.css'
-import './MarkerCluster.css'
-import HaltMarker from "../map-components/HaltMarker";
+export default class MarkerCluster extends React.Component {
+  static childContextTypes = {
+    layerContainer: object
+  };
 
-export default class MarkerCluster extends React.Component{
+  static contextTypes = {
+    map: object
+  };
 
-    static childContextTypes = {
-        markerCluster: PropTypes.object
+  getChildContext() {
+    return {
+      layerContainer: this.leafletElement
     };
+  }
 
-    getChildContext() {
-        return {
-            markerCluster: this.leafletElement,
-        };
-    }
+  componentWillMount() {
+    const { options } = this.props;
 
-    componentDidMount(){
-        this.leafletElement = L.markerClusterGroup();
-        this.context.map.addLayer(this.leafletElement);
-    }
+    this.leafletElement = L.markerClusterGroup(options);
 
-    componentWillUnmount(){
-        this.context.map.removeLayer(this.leafletElement);
-    }
+    this.initEventListeners(this.leafletElement);
 
-    render(){
-        return null;
+    // this.props.children.map(el => {
+    //   this.leafletElement.addlayer(el);
+    // });
+
+    // this.leafletElement.addLayers(this.props.children[0]);
+    // this.leafletElement.addLayers(this.props.children[1]);
+
+    this.context.map.addLayer(this.leafletElement);
+  }
+
+  componentWillUnmount() {
+    this.context.map.removeLayer(this.leafletElement);
+  }
+
+  initEventListeners = () => {
+    if (this.props.onClusterClick) {
+      this.leafletElement.on("clusterclick", cluster => {
+        this.props.onClusterClick(cluster.layer);
+      });
     }
+  };
+
+  render() {
+    // return <div>{this.props.children}</div>;
+    return null;
+  }
 }
-MarkerCluster.contextTypes = {
-    map: PropTypes.object
-};
