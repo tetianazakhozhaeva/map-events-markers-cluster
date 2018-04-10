@@ -32,7 +32,9 @@ class App extends Component {
     markerCoordinate: {
       latitude: 50.01,
       longitude: 36.031
-    }
+    },
+
+    isLayerVisible: false
   };
 
   emptyFunc1 = clusterLayer => {
@@ -55,7 +57,9 @@ class App extends Component {
     this.setState({
       isNotifications: !this.state.isNotifications,
       // halts: [],
-      notifications: []
+      notifications: [],
+
+      isLayerVisible: !this.state.isLayerVisible
     });
   };
 
@@ -101,7 +105,7 @@ class App extends Component {
             {/*</MarkerClusterGroup>*/}
 
             {/*<EventsMarkers isNotifications={this.state.isNotifications} />*/}
-            <MiddleLayer isNotifications={this.state.isNotifications} />
+            <MiddleLayer isLayerVisible={this.state.isLayerVisible} />
             <MarkerClusterGroup>
               <Marker position={[49.8397, 24.0297]} />
               <Marker position={[50.4501, 30.5234]} />
@@ -113,10 +117,10 @@ class App extends Component {
               <Marker position={[51.5, -0.09]} />
               <Marker position={[51.5, -0.09]} />
             </MarkerClusterGroup>
-            <VehicleCircle
-              coordinate={this.state.markerCoordinate}
-              icon={innerIcon}
-            />
+            {/*<VehicleCircle*/}
+            {/*coordinate={this.state.markerCoordinate}*/}
+            {/*icon={innerIcon}*/}
+            {/*/>*/}
           </Map>
           <button className="button" onClick={this.clickHandler}>
             <span>Hover </span>
